@@ -1,0 +1,29 @@
+use_default_settings: true
+
+server:
+  # Переопределяется переменной SEARXNG_SECRET_KEY из .env (см. .env_example)
+  secret_key: "change-me-in-env"
+  limiter: false
+  image_proxy: true
+
+search:
+  safe_search: 0
+  default_lang: "ru"
+  formats:
+    - html
+    - json
+
+engines:
+  - name: google
+    engine: google
+    shortcut: g
+    language: ru
+
+  - name: duckduckgo
+    engine: duckduckgo
+    shortcut: d
+
+  - name: wikipedia
+    engine: wikipedia
+    shortcut: w
+    language: ru

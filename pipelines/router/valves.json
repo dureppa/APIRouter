@@ -1,0 +1,1 @@
+{"MWS_BASE_URL": "https://api.gpt.mws.ru/v1", "MODEL_CHAT": "gpt-oss-20b", "MODEL_CLASSIFIER": "llama-3.1-8b-instruct", "MODEL_VISION": "cotype-pro-vl-32b", "MODEL_REASONING": "deepseek-r1-distill-qwen-32b", "MODEL_AUDIO": "whisper-turbo-local", "MODEL_IMAGE_GEN": "qwen-image-lightning"}

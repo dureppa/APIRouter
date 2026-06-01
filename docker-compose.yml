@@ -1,0 +1,70 @@
+services:
+
+  open-webui:
+      image: ghcr.io/open-webui/open-webui:0.5.7
+      container_name: open-webui
+      restart: unless-stopped
+      ports:
+        - "3000:8080"
+      env_file:
+        - .env
+      environment:
+        - OPENAI_API_BASE_URLS=http://pipelines:9099;${MWS_BASE_URL}
+        - OPENAI_API_KEYS=${PIPELINES_API_KEY};${MWS_API_KEY}
+        - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+        - ENABLE_OLLAMA_API=false
+      volumes:
+        - open-webui-data:/app/backend/data
+      depends_on:
+        - pipelines
+
+  pipelines:
+      image: ghcr.io/open-webui/pipelines:main
+      container_name: pipelines
+      restart: unless-stopped
+      ports:
+        - "9099:9099"
+      env_file:
+        - .env
+      volumes:
+        - ./pipelines:/app/pipelines
+      environment:
+        - OPENAI_API_KEY=${MWS_API_KEY}
+        - MWS_API_KEY=${MWS_API_KEY}
+        - MWS_BASE_URL=${MWS_BASE_URL}
+        - PIPELINES_API_KEY=${PIPELINES_API_KEY}
+        - PIPELINES_REQUIREMENTS_PATH=/app/pipelines/requirements.txt
+        - PIPELINE_STREAM=true
+        - REDIS_HOST=${REDIS_HOST}
+        - REDIS_PORT=${REDIS_PORT}
+        - FORCE_REASONING=${FORCE_REASONING}
+      depends_on:
+        - redis
+
+  redis:
+    image: redis:7-alpine
+    container_name: hackathon-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+
+  searxng:
+    image: searxng/searxng:latest
+    container_name: searxng
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./searxng/settings.yml:/etc/searxng/settings.yml
+    environment:
+      - SEARXNG_SECRET_KEY=${SEARXNG_SECRET_KEY}
+
+volumes:
+  open-webui-data:
+  searxng-data:
+  redis-data:

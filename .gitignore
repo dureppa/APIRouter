@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
+# Secrets
+.env
+
+.DS_Store
+Thumbs.db
+
+# Docker volumes
+data/
+
+# Runtime / cache (генерируются при запуске pipelines)
+pipelines/embeddings_cache.json
+pipelines/memory_store.json
